@@ -34,13 +34,17 @@ class NewAppWidget : AppWidgetProvider() {
 @OptIn(DelicateCoroutinesApi::class)
 internal fun updateAppWidget(context: Context, appWidgetManager: AppWidgetManager, appWidgetId: Int) {
     GlobalScope.launch {
-        val widgetText = context.getString(R.string.appwidget_text)
         val fetcher = ArticleFetcher()
         val articles = fetcher.fetchArticles()
-        println(articles)
+        articles.forEach { println(it) }
         // Construct the RemoteViews object
         val views = RemoteViews(context.packageName, R.layout.new_app_widget)
-        views.setTextViewText(R.id.appwidget_text, widgetText)
+
+        val title = articles[0].title
+        val imageUrl = articles[0].imageUrl!!
+        views.setTextViewText(R.id.news_title, title)
+        //WidgetImageLoader(context, views, appWidgetId, R.id.news_image).loadImage(imageUrl)
+
 
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views)

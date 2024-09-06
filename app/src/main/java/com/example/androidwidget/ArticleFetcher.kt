@@ -56,7 +56,8 @@ class ArticleFetcher {
             val articleUrl = URL("${BASE_PATH}${article.getString("urlPathId")}")
             val urn = article.getString("urn")
             val siteTitle = article.getJSONObject("site").getString("title")
-            val imageUrl = frontPageArticle.getJSONObject("image").getString("url")
+            val image = runCatching {  frontPageArticle.getJSONObject("image") }.getOrNull()
+            val imageUrl = image?.getString("url")
             Article(title, articleUrl.toString(), urn, siteTitle, imageUrl)
         }.toTypedArray()
     }
